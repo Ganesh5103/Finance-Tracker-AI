@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ book_name }} | Cyber Finance Book</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: radial-gradient(circle at top, #0a0f1f, #000);
+      color: #00ffc3;
+      font-family: 'Roboto Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,255,195,0.1);
+      padding: 12px 25px;
+      border-bottom: 2px solid #00ffc3;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      color: #00ffe5;
+      margin: 0;
+    }
+
+    .navbar button {
+      background: #000;
+      border: 1px solid #00ffc3;
+      color: #00ffc3;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .navbar button:hover {
+      background: #00ffc3;
+      color: #000;
+      box-shadow: 0 0 10px #00ffc3;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      background: rgba(0, 255, 200, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .summary div { flex: 1 1 200px; margin: 10px; }
+    .income { color: #00ff88; }
+    .expense { color: #ff4444; }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(0, 255, 200, 0.08);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    input, select, button {
+      background: #000;
+      border: 1px solid #00ffc3;
+      color: #00ffc3;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-family: 'Roboto Mono', monospace;
+      transition: 0.3s;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background: rgba(0, 255, 200, 0.05);
+      border-radius: 12px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #00ffc3;
+      text-align: center;
+    }
+
+    tr:hover { background: rgba(0, 255, 200, 0.08); }
+
+    .download-btn {
+      background:#00ffc3;
+      color:#000;
+      border:none;
+      padding:12px;
+      border-radius:6px;
+      cursor:pointer;
+      width:100%;
+      font-size: 1rem;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .download-btn:hover {
+      box-shadow: 0 0 12px #00ffc3;
+    }
+
+    .insights {
+      background: rgba(0,255,200,0.08);
+      border: 1px solid #00ffc3;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    #customCategoryInput { display:none; }
+
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <h2>📘 {{ book_name }}</h2>
+    <div>
+      <button onclick="window.location.href='/'">← Dashboard</button>
+      <button onclick="window.location.href='/logout'">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- SUMMARY -->
+    <div class="summary">
+      <div><h3 class="income">Income: ₹{{ income }}</h3></div>
+      <div><h3 class="expense">Expense: ₹{{ expense }}</h3></div>
+      <div><h3>Balance: ₹{{ total }}</h3></div>
+    </div>
+
+    <!-- ENTRY FORM -->
+    <form action="/add_entry/{{ book_name }}" method="POST">
+      <input type="text" name="description" placeholder="Description" required>
+      <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+
+      <select name="type" required>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+      </select>
+
+      <select id="categorySelect" name="category" required onchange="handleCategoryChange()">
+        <option value="" disabled selected>Select Category</option>
+
+        {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+
+        <option value="__custom__">➕ Add New Category</option>
+      </select>
+
+      <input type="text" id="customCategoryInput" name="custom_category"
+             placeholder="Enter new category">
+
+      <button type="submit">Add Entry</button>
+    </form>
+
+    <!-- TRANSACTION TABLE -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Amount (₹)</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for entry in expenses %}
+          <tr>
+            <td>{{ entry.type }}</td>
+            <td>{{ entry.description }}</td>
+            <td>{{ entry.amount }}</td>
+            <td>{{ entry.category }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- FULL-WIDTH DOWNLOAD BUTTON -->
+      <button class="download-btn" onclick="window.location='/download_pdf/{{ book_name }}'">
+        ⬇ Download Full Book as PDF
+      </button>
+
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="insights">
+      <h3>🤖 AI Insights</h3>
+      <ul>
+        {% for insight in insights %}
+        <li>{{ insight }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+<script>
+function handleCategoryChange() {
+  const select = document.getElementById("categorySelect");
+  const customInput = document.getElementById("customCategoryInput");
+
+  if (select.value === "__custom__") {
+    customInput.style.display = "inline-block";
+    customInput.required = true;
+  } else {
+    customInput.style.display = "none";
+    customInput.required = false;
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Cyber Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0a0f1f, #000);
+      font-family: 'Roboto Mono', monospace;
+      color: #00ffc3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background image layer */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://img.lovepik.com/bg/20240412/3D-Money-and-Coins-Calculator-for-Efficient-Income-and-Expense_5814267_wh860.jpg!/fw/860');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25;
+      z-index: -1;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #00ffe5;
+      text-align: center;
+    }
+
+    form {
+      background: rgba(0, 255, 200, 0.08);
+      padding: 30px 40px;
+      border-radius: 12px;
+      border: 1px solid #00ffc3;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(0, 255, 195, 0.2);
+    }
+
+    input, button {
+      background: #000;
+      border: 1px solid #00ffc3;
+      color: #00ffc3;
+      padding: 10px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00ffc3;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    button:hover {
+      background: #00ffc3;
+      color: #000;
+      box-shadow: 0 0 12px #00ffc3;
+    }
+
+    p {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #00ffe5;
+      margin-top: 20px;
+    }
+
+    a {
+      color: #00ffc3;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-shadow: 0 0 8px #00ffc3;
+    }
+  </style>
+</head>
+<body>
+  <h1>💰 Login to Finance Tracker</h1>
+
+  <form method="POST" action="/login">
+    <input type="text" name="username" placeholder="Enter Username" required>
+    <input type="password" name="password" placeholder="Enter Password" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+</body>
+</html>

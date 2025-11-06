@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyber Finance Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #0a0f1f, #000);
+      font-family: 'Roboto Mono', monospace;
+      color: #00ffc3;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px 10px;
+      border-bottom: 2px solid #00ffc3;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      color: #00ffe5;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 20px;
+      width: 100%;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: rgba(0, 255, 200, 0.08);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    input, button {
+      background: #000;
+      border: 1px solid #00ffc3;
+      color: #00ffc3;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-family: 'Roboto Mono', monospace;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00ffc3;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00ffc3;
+      color: #000;
+      box-shadow: 0 0 12px #00ffc3;
+    }
+
+    .books {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 1000px;
+    }
+
+    .book-card {
+      background: rgba(0,255,200,0.08);
+      border: 1px solid #00ffc3;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .book-card:hover {
+      background: #00ffc3;
+      color: #000;
+      box-shadow: 0 0 12px #00ffc3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9rem;
+      color: #00ffc3;
+      border-top: 1px solid #00ffc3;
+    }
+
+    @media (max-width: 768px) {
+      header { font-size: 1.4rem; }
+      form { flex-direction: column; align-items: stretch; }
+      input, button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>💸 Finance Tracker</header>
+
+  <div class="container">
+    <form method="POST" action="/create_book">
+      <input type="text" name="book_name" placeholder="Enter New Book Name (e.g. November_2025)" required>
+      <button type="submit">Create / Open Book</button>
+    </form>
+
+    <div class="books">
+      {% for book in books %}
+      <div class="book-card" onclick="window.location.href='/book/{{ book }}'">
+        <h3>📘 {{ book }}</h3>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <footer>⚙️ Auto Backup Active | 🤖 Local AI Insights Enabled</footer>
+</body>
+</html>
