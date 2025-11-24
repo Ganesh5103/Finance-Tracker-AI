@@ -1,17 +1,17 @@
-Flask==2.3.3
+Flask==2.3.2
 pymongo==4.6.1
 python-dotenv==1.0.1
-dnspython==2.6.1
-Werkzeug==3.0.1
-Jinja2==3.1.2
+dnspython==2.4.2
+certifi==2025.4.26
+requests==2.31.0
+urllib3==2.2.2
+idna==3.6
+charset-normalizer==3.3.2
+Werkzeug==2.3.7
+Jinja2==3.1.4
+itsdangerous==2.1.2
 MarkupSafe==2.1.5
 
-# Optional: if your project uses Pandas for insights
-pandas==2.2.2
+# If you REALLY need pandas, use a safe version:
+pandas==2.1.4
 numpy==1.26.4
-
-# Optional: used in your project earlier
-requests==2.32.3
-
-# If using OpenAI API
-openai==1.12.0
