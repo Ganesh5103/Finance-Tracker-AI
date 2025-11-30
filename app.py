@@ -10,6 +10,7 @@ from collections import Counter, defaultdict
 import statistics
 from flask import make_response
 import re
+import os
 
 
 
@@ -493,4 +494,5 @@ def logout():
     return redirect(url_for("login"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
