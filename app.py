@@ -181,6 +181,7 @@ def generate_insights(transactions):
 def download_pdf(book_name):
     username = session["username"]
 
+    # Fetch transactions
     transactions = list(transactions_collection.find({
         "username": username,
         "book_name": book_name
@@ -190,6 +191,8 @@ def download_pdf(book_name):
 
     pdf = FPDF()
     pdf.add_page()
+
+    # Use core fonts only → Avoids missing TTF errors on Render
     pdf.set_font("Arial", size=12)
 
     # Title
@@ -197,7 +200,7 @@ def download_pdf(book_name):
     pdf.cell(0, 10, f"Transaction Report: {book_name}", ln=True, align='C')
     pdf.ln(5)
 
-    # Table Headers
+    # Headers
     pdf.set_font("Arial", "B", 12)
     pdf.cell(35, 8, "Type", border=1)
     pdf.cell(65, 8, "Description", border=1)
@@ -205,27 +208,31 @@ def download_pdf(book_name):
     pdf.cell(45, 8, "Category", border=1)
     pdf.ln()
 
-    # Table Rows
+    # Rows
     pdf.set_font("Arial", size=11)
+
     for t in transactions:
-        desc = str(t.get("description", ""))[:30].encode("latin-1", "ignore").decode("latin-1")
-        cat = str(t.get("category", "")).encode("latin-1", "ignore").decode("latin-1")
+        # Remove emojis → FPDF cannot render unicode symbols
+        desc = re.sub(r"[^\x00-\x7F]+", "", str(t.get("description", "")))[:30]
+        category = re.sub(r"[^\x00-\x7F]+", "", str(t.get("category", "")))
 
         pdf.cell(35, 8, t.get("type", ""), border=1)
         pdf.cell(65, 8, desc, border=1)
         pdf.cell(30, 8, str(t.get("amount", "")), border=1)
-        pdf.cell(45, 8, cat, border=1)
+        pdf.cell(45, 8, category, border=1)
         pdf.ln()
 
-    pdf_filename = f"{book_name}_transactions.pdf"
+    filename = f"{book_name}_transactions.pdf"
 
-    # FIXED ↓↓↓ (returns proper bytes)
-    pdf_bytes = bytes(pdf.output(dest="S"))
+    # Render PDF correctly as bytes (required by Render + Flask)
+    pdf_bytes = pdf.output(dest="S").encode("latin-1")
 
-    return pdf_bytes, {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": f"attachment; filename={pdf_filename}"
-    }
+    response = make_response(pdf_bytes)
+    response.headers.set("Content-Type", "application/pdf")
+    response.headers.set("Content-Disposition", f"attachment; filename={filename}")
+
+    return response
+
 
 
 
