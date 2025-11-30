@@ -11,6 +11,7 @@ import statistics
 from flask import make_response
 import re
 import os
+from fpdf import FPDF
 
 
 
